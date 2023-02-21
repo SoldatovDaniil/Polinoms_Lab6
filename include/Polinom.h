@@ -2,6 +2,10 @@
 #include"List.h"
 #include<math.h>
 #include<iostream>
+#include<string>
+
+using namespace std;
+
 
 class Monom
 {
@@ -159,7 +163,7 @@ public:
 		}
 		else
 		{
-			std::cout << "x^" << m.degX << "y^" << m.degY << "z^" << m.degZ;
+			ostr << "x^" << m.degX << "y^" << m.degY << "z^" << m.degZ;
 		}
 		return ostr;
 	}
@@ -170,46 +174,45 @@ public:
 class Polinom
 {
 public:
+	char name;
 	List<Monom> monoms;
 
-	Polinom(List<Monom> list) : monoms{ list }
-	{}
-
-	Polinom operator+(const Polinom& pOther)
+	//на вход будет приходить строка(гарантировано правильная) и имя полинома
+	//коснтруктор по умолчанию,с параметрами, копирования, оператор = и деструктор
+	Polinom()
 	{
+		name = ' ';
 	}
 
-	Polinom operator-(const Polinom& pOther)
+	Polinom(char& n, string& inpStr)
 	{
+		name = n;
 	}
 
-	Polinom operator*(const Polinom& pOther)
+	/*Polinom operator+(const Polinom& pOther)
 	{
-	}
+		условие на равенство степеней
+	}*/
 
-	Polinom operator/(const Polinom& pOther)
+	/*Polinom operator*(const Polinom& pOther)
 	{
-	}
+	}*/
 
-	Polinom operator*(double n)
+	/*Polinom operator/(const Polinom& pOther)
 	{
-	}
-	
-	Polinom operator/(double n)
-	{
-	}
+	}*/
 
-	Polinom operator+(double n)
+	char getName()
 	{
+		return this->name;
 	}
-
-	Polinom operator-(double n)
-	{
-	}
-
 
 	//Вывод
-	friend ostream& operator<<(ostream& ostr, const Polinom& p)
+	/*friend ostream& operator<<(ostream& ostr, const Polinom& p)
 	{
-	}
+	}*/
 };
+
+//на вход прога получает строку с полиномами.
+//парсим строку, находим полиномы, создаём массив полиномов, в исходной строке полиномы заменяем именами(типа a, b, c, d и т.д.).
+//получаем выражение из полиномов, его + массив полиномов отправляем в транслятор.

@@ -1,6 +1,4 @@
 #include <iostream>
-
-
 using namespace std;
 template <class T>
 class List
@@ -62,6 +60,9 @@ public:
 			iterator tmp(*this);
 			i_node = i_node->next;
 			return tmp;
+		}
+		iterator cbegin() const {
+			return iterator(root);
 		}
 
 		T& operator*()
@@ -136,6 +137,10 @@ public:
 
 	List& operator=(const List& list)
 	{
+		if (this == &list)
+		{
+			return *this;
+		}
 		root = new Node(list.root->elem);
 		Node* tmp1 = root;
 		Node* tmp2 = list.root;
@@ -258,7 +263,7 @@ public:
 			List<T> hlist = separator();
 			mergeSort();
 			hlist.mergeSort();
-			*this = merge(hlist); 
+			*this = merge(hlist);
 		}
 	}
 
@@ -335,12 +340,12 @@ public:
 		}
 	}
 
-	iterator begin()
+	iterator begin() const
 	{
 		return iterator(root);
 	}
 
-	iterator end()
+	iterator end() const
 	{
 		Node* tmp = root;
 		while (tmp->next != nullptr)

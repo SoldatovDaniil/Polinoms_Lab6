@@ -184,7 +184,7 @@ public:
 		name = ' ';
 	}
 
-	Polinom(char& n, string& inpStr)
+	Polinom(char& n, List<Monom> list)
 	{
 		name = n;
 	}

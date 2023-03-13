@@ -256,7 +256,7 @@ public:
 		monoms = pol.monoms;
 	}
 
-	Polinom(char& n, List<Monom>& monomy)
+	Polinom(char& n, List<Monom> monomy)
 	{
 		monoms = monomy;
 		name = n;

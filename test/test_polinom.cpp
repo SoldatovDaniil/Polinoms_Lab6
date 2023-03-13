@@ -66,7 +66,7 @@ TEST(Monom, operator_compare_check_1)
 TEST(Monom, operator_compare_check_2)
 {
 	Monom m1(12, 1, 2, 3);
-	Monom m2(-12, 1, 2, 3);
+	Monom m2(12, -1, 2, 3);
 	EXPECT_EQ(false, m1 == m2);
 }
 
@@ -108,8 +108,8 @@ TEST(Monom, integral_check_1)
 
 TEST(Monom, integral_check_2)
 {
-	Monom m1(12, 3, 0, 0);
-	Monom res(12, 3, 1, 0);
+	Monom m1(12, 3, 1, 0);
+	Monom res(6, 3, 2, 0);
 	EXPECT_EQ(res, m1.integral('y'));
 }
 
@@ -126,4 +126,3 @@ TEST(Monom, pointValue_check)
 	Monom res(64, 0, 0, 0);
 	EXPECT_EQ(res, m1.pointValue(-2,4,1));
 }
-

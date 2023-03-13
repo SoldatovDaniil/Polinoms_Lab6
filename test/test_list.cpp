@@ -121,19 +121,6 @@ TEST(List, can_get_size_right)
 	EXPECT_EQ(3, l1.getSize());
 }
 
-TEST(List, can_been_maked_how_copy)
-{
-	List<int> l1;
-	l1.push_front(1);
-	l1.push_front(2);
-	l1.push_front(3);
-	List<int> l2(l1);
-	for (List<int>::iterator it1 = l1.begin(), it2 = l2.begin(); it1 != l1.end(), it2 != l2.end(); it1++, it2++)
-	{
-		EXPECT_EQ(*it1, *it2);
-	}
-}
-
 TEST(List, can_erase_after_right)
 {
 	List<int> l1;

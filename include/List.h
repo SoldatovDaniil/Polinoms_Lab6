@@ -61,7 +61,9 @@ public:
 			i_node = i_node->next;
 			return tmp;
 		}
-		iterator cbegin() const {
+
+		iterator cbegin()
+		{
 			return iterator(root);
 		}
 

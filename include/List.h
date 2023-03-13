@@ -62,9 +62,9 @@ public:
 			return tmp;
 		}
 
-		iterator cbegin()
+		iterator cbegin(List& tmp)
 		{
-			return iterator(root);
+			return iterator(tmp.root);
 		}
 
 		T& operator*()

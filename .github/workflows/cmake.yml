@@ -2,9 +2,9 @@ name: CMake
 
 on:
   push:
-    branches: [ "main", "class_polinom" ]
+    branches: [ "main", "class_polinom", "dev" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "class_polinom", "dev" ]
 
 env:
   BUILD_TYPE: Release

@@ -15,9 +15,7 @@ public:
 	double degY;
 	double degZ;
 
-
-	Monom(double c = 1., double x = 0., double y = 0., double z = 0.) : coef{ c }, degX{ x }, degY{ y }, degZ{ z }
-	{}
+	Monom(double c = 1., double x = 0., double y = 0., double z = 0.) : coef(c), degX(x), degY(y), degZ(z) { ; }
 
 	Monom(const Monom& mOther)
 	{
@@ -27,6 +25,13 @@ public:
 		degZ = mOther.degZ;
 	}
 
+	double getX() { return degX; }
+	double getY() { return degY; }
+	double getZ() { return degZ; }
+	double getCoef() { return coef; }
+	void print() {
+		std::cout << coef << "  " << degX << "  " << degY << "  " << degZ << "  " << std::endl;
+	}
 	~Monom()
 	{
 		coef = 0;
@@ -45,10 +50,31 @@ public:
 	}
 
 	Monom operator+(const Monom& mOther)
-	{	
+	{
 		Monom res(*this);
 		res.coef += mOther.coef;
 		return res;
+	}
+	// false
+	bool operator>=(const Monom& other)
+	{
+		if (degX < other.degX)
+		{
+			return true;
+
+		}
+		else if ((degX == other.degX) && (degY < other.degY))
+		{
+			return true;
+		}
+		else if ((degX == other.degX) && (degY == other.degY) && (degZ < other.degZ))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	Monom operator*(const Monom& mOther)
@@ -85,9 +111,9 @@ public:
 		return res;
 	}
 
-	bool operator==(const Monom& mOther) const 
+	bool operator==(const Monom& mOther) const
 	{
-		if ((coef == mOther.coef) && (degX == mOther.degX) && (degY == mOther.degY) && (degZ == mOther.degZ))
+		if ((degX == mOther.degX) && (degY == mOther.degY) && (degZ == mOther.degZ))
 		{
 			return true;
 		}
@@ -102,7 +128,7 @@ public:
 		return(!(*this == mOther));
 	}
 
-	//Производная по переменной
+	//ГЏГ°Г®ГЁГ§ГўГ®Г¤Г­Г Гї ГЇГ® ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©
 	Monom deriv(char var)
 	{
 		Monom res(*this);
@@ -121,24 +147,48 @@ public:
 			res.degZ -= 1.;
 			break;
 		}
-		return res; 
+		return res;
 	}
 
-	//Интеграл по переменной
+	//Г€Г­ГІГҐГЈГ°Г Г« ГЇГ® ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©
 	Monom integral(char var)
 	{
 		Monom res(*this);
 		switch (var)
 		{
 		case 'x':
+			if (degX == 0)
+			{
+				res.coef = 0;
+				res.degX = 0;
+				res.degY = 0;
+				res.degZ = 0;
+				break;
+			}
 			res.coef /= res.degX + 1.;
 			res.degX += 1.;
 			break;
 		case 'y':
+			if (degY == 0)
+			{
+				res.coef = 0;
+				res.degX = 0;
+				res.degY = 0;
+				res.degZ = 0;
+				break;
+			}
 			res.coef /= res.degY + 1.;
 			res.degY += 1.;
 			break;
 		case 'z':
+			if (degZ == 0)
+			{
+				res.coef = 0;
+				res.degX = 0;
+				res.degY = 0;
+				res.degZ = 0;
+				break;
+			}
 			res.coef /= res.degZ + 1.;
 			res.degZ += 1.;
 			break;
@@ -146,15 +196,15 @@ public:
 		return res;
 	}
 
-	//Значение в точке(Значение при известных только х, у, z, х и у, х и z, и т.д)
-	Monom pointValue(double x = 1, double y = 1, double z = 1)
+	//Г‡Г­Г Г·ГҐГ­ГЁГҐ Гў ГІГ®Г·ГЄГҐ(Г‡Г­Г Г·ГҐГ­ГЁГҐ ГЇГ°ГЁ ГЁГ§ГўГҐГ±ГІГ­Г»Гµ ГІГ®Г«ГјГЄГ® Гµ, Гі, z, Гµ ГЁ Гі, Гµ ГЁ z, ГЁ ГІ.Г¤)
+	double pointValue(double x = 1, double y = 1, double z = 1)
 	{
-		Monom res(coef);
-		res.coef *= (pow(x, degX) * pow(y, degY) * pow(z, degZ));
+		double res = 0.0;
+		res = coef * (pow(x, degX) * pow(y, degY) * pow(z, degZ));
 		return res;
 	}
 
-	//Вывод(Сделать без лишних нулей у коэфициентов)
+	//Г‚Г»ГўГ®Г¤(Г‘Г¤ГҐГ«Г ГІГј ГЎГҐГ§ Г«ГЁГёГ­ГЁГµ Г­ГіГ«ГҐГ© Гі ГЄГ®ГЅГґГЁГ¶ГЁГҐГ­ГІГ®Гў)
 	friend ostream& operator<<(ostream& ostr, const Monom& m)
 	{
 		if (m.coef != 1)
@@ -174,45 +224,236 @@ public:
 class Polinom
 {
 public:
-	char name;
+	//	char name;
 	List<Monom> monoms;
 
-	//на вход будет приходить строка(гарантировано правильная) и имя полинома
-	//коснтруктор по умолчанию,с параметрами, копирования, оператор = и деструктор
-	Polinom()
+	//Г­Г  ГўГµГ®Г¤ ГЎГіГ¤ГҐГІ ГЇГ°ГЁГµГ®Г¤ГЁГІГј Г±ГІГ°Г®ГЄГ (ГЈГ Г°Г Г­ГІГЁГ°Г®ГўГ Г­Г® ГЇГ°Г ГўГЁГ«ГјГ­Г Гї) ГЁ ГЁГ¬Гї ГЇГ®Г«ГЁГ­Г®Г¬Г 
+	//ГЄГ®Г±Г­ГІГ°ГіГЄГІГ®Г° ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ,Г± ГЇГ Г°Г Г¬ГҐГІГ°Г Г¬ГЁ, ГЄГ®ГЇГЁГ°Г®ГўГ Г­ГЁГї, Г®ГЇГҐГ°Г ГІГ®Г° = ГЁ Г¤ГҐГ±ГІГ°ГіГЄГІГ®Г°
+
+	List<Monom>::iterator begin()
 	{
-		name = ' ';
+		return monoms.begin();
 	}
 
-	Polinom(char& n, List<Monom> list)
-	{
-		name = n;
+	List<Monom>::iterator end()
+  {
+		return monoms.end();
 	}
 
-	/*Polinom operator+(const Polinom& pOther)
-	{
-		условие на равенство степеней
-	}*/
+	//	List<Monom>::iterator cbegin() const
+		//{
+			//return monoms.cbegin();
+		//}
 
-	/*Polinom operator*(const Polinom& pOther)
-	{
-	}*/
+	Polinom() = default;
 
-	/*Polinom operator/(const Polinom& pOther)
+	Polinom(Monom& mon)
 	{
-	}*/
-
-	char getName()
-	{
-		return this->name;
+		monoms.push_back(mon);
 	}
 
-	//Вывод
-	/*friend ostream& operator<<(ostream& ostr, const Polinom& p)
+	Polinom(const Polinom& pol) {
+		monoms = pol.monoms;
+	}
+
+	/*
+		Polinom(char& n, string& inpStr)
+		{
+			name = n;
+		}
+	*/
+
+	Polinom& operator=(const Polinom& pol)
 	{
-	}*/
+		monoms = pol.monoms;
+		return *this;
+	}
+
+	void print() {
+		auto it = monoms.begin();
+		while (it != nullptr) {
+			(*it).print();
+			it++;
+		}
+	}
+	void addMonominPolinom(const Monom& mon)
+	{
+		auto it = monoms.begin();
+		while (it != nullptr) {
+			if (((*it).degX == mon.degX) && ((*it).degY == mon.degY) && ((*it).degZ == mon.degZ))
+			{
+				(*it) = (*it) + mon;
+				return;
+			}
+			it++;
+		}
+		monoms.push_back(mon);
+		return;
+	}
+
+	Polinom operator+(const Polinom& pol)
+	{
+		Polinom tmp(*this);
+		auto it2 = (pol.monoms).begin();
+		while (it2 != nullptr) {
+			tmp.addMonominPolinom(*it2);
+			it2++;
+		}
+		return tmp;
+	}
+
+	void subMonominPolinom(const Monom& mon) {
+		Monom minus(mon);
+		minus = minus * (-1);
+		this->addMonominPolinom(minus);
+	}
+
+	Polinom operator-(const Polinom& pol)
+	{
+		Polinom tmp(*this);
+		auto it2 = (pol.monoms).begin();
+		while (it2 != nullptr) {
+			tmp.subMonominPolinom(*it2);
+			it2++;
+		}
+		return tmp;
+	}
+
+	void addfortest(const Monom& mon) { // for test
+		monoms.push_back(mon);
+	}
+
+	void doSimple() { //ГЇГ°ГЁГўГҐГ±ГІГЁ ГЇГ®Г¤Г®ГЎГ­Г»ГҐ Г±Г«Г ГЈГ ГҐГ¬Г»ГҐ Г¬Г®Г¦Г­Г® Г±Г¤ГҐГ«Г ГІГј Г«ГҐГЈГ·ГҐ Г± tmp ГЁ Г¬ГҐГІГ®Г¤Г®Г¬ addmoninpol
+		auto it1 = monoms.begin();
+		auto it2 = monoms.begin();
+		auto it3 = monoms.begin();
+		while (it1 != nullptr) {
+			it2 = monoms.begin();
+			while (it2 != nullptr) {
+				if (((*it1).degX == (*it2).degX) && ((*it1).degY == (*it2).degY) && ((*it1).degZ == (*it2).degZ) && (it1 != it2)) {
+					(*it1) = (*it1) + (*it2);
+					monoms.erase_after(it3);
+					it2 = it3;
+				}
+				else
+				{
+					it3 = it2;
+					it2++;
+				}
+			}
+			it1++;
+		}
+	}
+
+
+	Polinom operator*(const Polinom& pol)
+	{
+		Polinom tmp;
+		auto it1 = monoms.begin();
+		auto it2 = (pol.monoms).begin();
+		while (it1 != nullptr)
+		{
+			it2 = (pol.monoms).begin();
+			while (it2 != nullptr)
+			{
+				tmp.addMonominPolinom((*it1) * (*it2));
+				it2++;
+			}
+			it1++;
+		}
+		tmp.doSimple();
+		return tmp;
+	}
+
+	Polinom operator/(const Polinom& pol)
+	{
+		Polinom tmp;
+		Polinom q(*this);
+		Polinom p(pol);
+		q.sort();
+		p.sort();
+		Monom t;
+		auto it1 = (q.monoms).begin();
+		auto it2 = (p.monoms).begin();
+		while ((it1 != nullptr) && ((*it1).degX >= (*it2).degX) && ((*it1).degY >= (*it2).degY) && ((*it1).degZ >= (*it2).degZ))
+		{
+			t = (*it1) / (*it2);
+			tmp.addMonominPolinom(t);
+			q = q - (Polinom(t) * p);
+			(q.monoms).pop_front();
+			it1 = q.begin();
+		}
+		return tmp;
+	}
+
+	Polinom integral(char var)
+	{
+		Polinom res;
+		auto it = monoms.begin();
+		while (it != nullptr)
+		{
+			res.addMonominPolinom((*it).integral(var));
+			it++;
+		}
+		return res;
+	}
+
+	Polinom deriv(char var)
+	{
+		Polinom res;
+		auto it = monoms.begin();
+		while (it != nullptr)
+		{
+			if (((var == 'x') && ((*it).degX != 0)) || ((var == 'y') && ((*it).degY != 0)) || ((var == 'z') && ((*it).degZ != 0)))
+			{
+				res.addMonominPolinom((*it).deriv(var));
+			}
+			it++;
+		}
+		if (res.monoms.begin() == nullptr);
+		{
+			Monom m(0, 0, 0, 0);
+			res.addMonominPolinom(m);
+		}
+		return res;
+	}
+
+	double pointValue(double x = 1, double y = 1, double z = 1)
+	{
+		double res = 0.0;
+		auto it = monoms.begin();
+		while (it != nullptr)
+		{
+			res += (*it).pointValue(x, y, z);
+			it++;
+		}
+		return res;
+	}
+
+	void sort()
+	{
+		monoms.mergeSort();
+	}
+	//	char getName()
+	//	{
+	//		return this->name;
+	//	}
+
+		//Г‚Г»ГўГ®Г¤
+	friend ostream& operator<<(ostream& ostr, const Polinom& p)
+	{
+		auto it = (p.monoms).begin();
+		while (it != (p.monoms).end())
+		{
+			ostr << (*it).coef << "x^" << (*it).degX << "y^" << (*it).degY << "z^" << (*it).degZ << " + ";
+			it++;
+		}
+		ostr << (*it).coef << "x^" << (*it).degX << "y^" << (*it).degY << "z^" << (*it).degZ;
+		return ostr;
+	}
 };
 
-//на вход прога получает строку с полиномами.
-//парсим строку, находим полиномы, создаём массив полиномов, в исходной строке полиномы заменяем именами(типа a, b, c, d и т.д.).
-//получаем выражение из полиномов, его + массив полиномов отправляем в транслятор.
+//Г­Г  ГўГµГ®Г¤ ГЇГ°Г®ГЈГ  ГЇГ®Г«ГіГ·Г ГҐГІ Г±ГІГ°Г®ГЄГі Г± ГЇГ®Г«ГЁГ­Г®Г¬Г Г¬ГЁ.
+//ГЇГ Г°Г±ГЁГ¬ Г±ГІГ°Г®ГЄГі, Г­Г ГµГ®Г¤ГЁГ¬ ГЇГ®Г«ГЁГ­Г®Г¬Г», Г±Г®Г§Г¤Г ВёГ¬ Г¬Г Г±Г±ГЁГў ГЇГ®Г«ГЁГ­Г®Г¬Г®Гў, Гў ГЁГ±ГµГ®Г¤Г­Г®Г© Г±ГІГ°Г®ГЄГҐ ГЇГ®Г«ГЁГ­Г®Г¬Г» Г§Г Г¬ГҐГ­ГїГҐГ¬ ГЁГ¬ГҐГ­Г Г¬ГЁ(ГІГЁГЇГ  a, b, c, d ГЁ ГІ.Г¤.).
+//ГЇГ®Г«ГіГ·Г ГҐГ¬ ГўГ»Г°Г Г¦ГҐГ­ГЁГҐ ГЁГ§ ГЇГ®Г«ГЁГ­Г®Г¬Г®Гў, ГҐГЈГ® 
+// ГіГЎГ°Г ГІГј ГЅГ«ГҐГ¬ГҐГ­ГІГ» Г± ГЄГ®ГЅГґГґ = 0 (Г¬Г®Г¦Г­Г® Г®Г±ГІГ ГўГЁГІГј)

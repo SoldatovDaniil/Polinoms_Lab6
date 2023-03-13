@@ -126,3 +126,4 @@ TEST(Monom, pointValue_check)
 	Monom res(64, 0, 0, 0);
 	EXPECT_EQ(res, m1.pointValue(-2,4,1));
 }
+

@@ -126,23 +126,4 @@ TEST(Monom, pointValue_check)
 	Monom res(64, 0, 0, 0);
 	EXPECT_EQ(res, m1.pointValue(-2,4,1));
 }
-TEST(Polinom, shtoto)
-{
-	Monom m1(1, 2, 2, 1);
-	Monom m2(3, 2, 2, 1);
-	Monom m3(2, 1, 2, 1);
-	Polinom p1(m1);
-	p1.addMonominPolinom(m2);
-	p1.addMonominPolinom(m3);
 
-	Monom m1(1, 2, 2, 1);
-	Monom m2(3, 2, 2, 1);
-	Monom m3(2, 1, 2, 1);
-	Polinom p2(m1);
-	p2.addMonominPolinom(m2);
-	p2.addMonominPolinom(m3);
-
-
-	Monom res(64, 0, 0, 0);
-	EXPECT_EQ(res, m1.pointValue(-2, 4, 1));
-}

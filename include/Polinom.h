@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include"List.h"
 #include<math.h>
 #include<iostream>
@@ -29,9 +29,11 @@ public:
 	double getY() { return degY; }
 	double getZ() { return degZ; }
 	double getCoef() { return coef; }
+
 	void print() {
 		std::cout << coef << "  " << degX << "  " << degY << "  " << degZ << "  " << std::endl;
 	}
+
 	~Monom()
 	{
 		coef = 0;
@@ -55,6 +57,7 @@ public:
 		res.coef += mOther.coef;
 		return res;
 	}
+
 	// false
 	bool operator>=(const Monom& other)
 	{
@@ -128,7 +131,6 @@ public:
 		return(!(*this == mOther));
 	}
 
-	//Ïðîèçâîäíàÿ ïî ïåðåìåííîé
 	Monom deriv(char var)
 	{
 		Monom res(*this);
@@ -150,7 +152,6 @@ public:
 		return res;
 	}
 
-	//Èíòåãðàë ïî ïåðåìåííîé
 	Monom integral(char var)
 	{
 		Monom res(*this);
@@ -196,7 +197,6 @@ public:
 		return res;
 	}
 
-	//Çíà÷åíèå â òî÷êå(Çíà÷åíèå ïðè èçâåñòíûõ òîëüêî õ, ó, z, õ è ó, õ è z, è ò.ä)
 	double pointValue(double x = 1, double y = 1, double z = 1)
 	{
 		double res = 0.0;
@@ -204,7 +204,6 @@ public:
 		return res;
 	}
 
-	//Âûâîä(Ñäåëàòü áåç ëèøíèõ íóëåé ó êîýôèöèåíòîâ)
 	friend ostream& operator<<(ostream& ostr, const Monom& m)
 	{
 		if (m.coef != 1)
@@ -224,11 +223,9 @@ public:
 class Polinom
 {
 public:
-	//	char name;
-	List<Monom> monoms;
 
-	//íà âõîä áóäåò ïðèõîäèòü ñòðîêà(ãàðàíòèðîâàíî ïðàâèëüíàÿ) è èìÿ ïîëèíîìà
-	//êîñíòðóêòîð ïî óìîë÷àíèþ,ñ ïàðàìåòðàìè, êîïèðîâàíèÿ, îïåðàòîð = è äåñòðóêòîð
+	char name;
+	List<Monom> monoms;
 
 	List<Monom>::iterator begin()
 	{
@@ -236,36 +233,39 @@ public:
 	}
 
 	List<Monom>::iterator end()
-  {
+	{
 		return monoms.end();
 	}
 
-	//	List<Monom>::iterator cbegin() const
-		//{
-			//return monoms.cbegin();
-		//}
+	//List<Monom>::iterator cbegin() const
+	//{
+		//return monoms.cbegin();
+	//}
 
 	Polinom() = default;
 
 	Polinom(Monom& mon)
 	{
+		name = 'a';
 		monoms.push_back(mon);
 	}
 
-	Polinom(const Polinom& pol) {
+	Polinom(const Polinom& pol) 
+	{
+		name = pol.name;
 		monoms = pol.monoms;
 	}
 
-	/*
-		Polinom(char& n, string& inpStr)
-		{
-			name = n;
-		}
-	*/
+	Polinom(char& n, List<Monom>& monomy)
+	{
+		monoms = monomy;
+		name = n;
+	}
 
 	Polinom& operator=(const Polinom& pol)
 	{
 		monoms = pol.monoms;
+		name = pol.name;
 		return *this;
 	}
 
@@ -323,7 +323,7 @@ public:
 		monoms.push_back(mon);
 	}
 
-	void doSimple() { //ïðèâåñòè ïîäîáíûå ñëàãàåìûå ìîæíî ñäåëàòü ëåã÷å ñ tmp è ìåòîäîì addmoninpol
+	void doSimple() {
 		auto it1 = monoms.begin();
 		auto it2 = monoms.begin();
 		auto it3 = monoms.begin();
@@ -344,7 +344,6 @@ public:
 			it1++;
 		}
 	}
-
 
 	Polinom operator*(const Polinom& pol)
 	{
@@ -439,7 +438,6 @@ public:
 	//		return this->name;
 	//	}
 
-		//Âûâîä
 	friend ostream& operator<<(ostream& ostr, const Polinom& p)
 	{
 		auto it = (p.monoms).begin();
@@ -452,8 +450,3 @@ public:
 		return ostr;
 	}
 };
-
-//íà âõîä ïðîãà ïîëó÷àåò ñòðîêó ñ ïîëèíîìàìè.
-//ïàðñèì ñòðîêó, íàõîäèì ïîëèíîìû, ñîçäà¸ì ìàññèâ ïîëèíîìîâ, â èñõîäíîé ñòðîêå ïîëèíîìû çàìåíÿåì èìåíàìè(òèïà a, b, c, d è ò.ä.).
-//ïîëó÷àåì âûðàæåíèå èç ïîëèíîìîâ, åãî 
-// óáðàòü ýëåìåíòû ñ êîýôô = 0 (ìîæíî îñòàâèòü)

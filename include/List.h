@@ -432,7 +432,7 @@ public:
 		Node* tmp = root;
 		while (tmp)
 		{
-			cout << tmp->elem;
+			cout << '\n' << tmp->elem << '\n';
 			tmp = tmp->next;
 		}
 		cout << endl;

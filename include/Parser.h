@@ -297,12 +297,13 @@ Monom stringToMonom(const string& inptStr)
 			}
 			else if (status == await::coef || status == await::start)
 			{
-				coef = stod(tmp) * mcoef;
+				coef *= stod(tmp);
 			}
 			tmp = "";
 			i--;
 		}
 	}
+	coef *= mcoef;
 	Monom res(coef, degx, degy, degz);
 	return res;
 }
@@ -338,7 +339,7 @@ List<Monom> stringToMonomList(const string& inptStr)
 		
 		if (inptStr[i] >= 48 && inptStr[i] <= 57)
 		{
-			while ((inptStr[i] >= 48 && inptStr[i] <= 57) || inptStr[i] == '.')
+			while (((inptStr[i] >= 48 && inptStr[i] <= 57) || inptStr[i] == '.') && i < inptStr.size())
 			{
 				tmp += inptStr[i];
 				i++;
@@ -359,8 +360,7 @@ class PolinomParse
 public:
 	List<Polinom> polinoms;
 	string str;
-	// Expression expression;
-	//check string example: 4x^2//-34y^3 проверим в expressioncheck
+
 	//обозначение интеграла и производной Ix и Dx
 	PolinomParse(const string& inpStr)
 	{
@@ -368,7 +368,7 @@ public:
 		string tmp;
 		string polStr;
 		List<char> nameList;
-		bool flag = false;
+		bool flagTwo = false;
 
 		for (int i = 97; i <= 122; i++)
 		{
@@ -379,24 +379,32 @@ public:
 
 		for (int i = 0; i < inpStr.size(); i++)
 		{
-			
-			if (inpStr[i] == 'I' || inpStr[i] == 'D')
+
+			/*if (inpStr[i] == 'I' || inpStr[i] == 'D')
 			{
 				if (i + 2 >= inpStr.size())
 				{
 					throw ("Error: wrong view of input string!");
 				}
-				if ((inpStr[i + 1] == 'x' || inpStr[i + 1] == 'y' || inpStr[i + 1] == 'z') && inpStr[i + 2] == '(')
+				else if((inpStr[i + 1] == 'x' || inpStr[i + 1] == 'y' || inpStr[i + 1] == 'z') && inpStr[i + 2] == '(')
 				{
 					tmp += inpStr[i] + inpStr[i + 1] + inpStr[i + 2];
 					i += 3;
 				}
+			}*/
+
+			if (inpStr[i] == 'I' || inpStr[i] == 'D')
+			{
+				tmp += inpStr[i];
+				flagTwo = true;
+				continue;
 			}
 
-			if (inpStr[i] == ')')
+			if ((inpStr[i] == 'x' || inpStr[i] == 'y' || inpStr[i] == 'z') && flagTwo)
 			{
-				flag = true;
 				tmp += inpStr[i];
+				flagTwo = false; 
+				continue;
 			}
 
 			if (inpStr[i] == '+' || inpStr[i] == '-')
@@ -407,34 +415,45 @@ public:
 				}
 				else
 				{
-					if (inpStr[i + 1] == '(' && flag)
+					if (inpStr[i + 1] == '(' || inpStr[i + 1] == 'I' || inpStr[i + 1] == 'D')
 					{
 						tmp += inpStr[i];
-						flag = false;
 					}
 					else
 					{
 						polStr += inpStr[i];
 					}
 				}
+				continue;
 			}
 
-			if (inpStr[i] == '(' || inpStr[i] == '*' || inpStr[i] == '/')
+			if (inpStr[i] == '(' || inpStr[i] == '*' || inpStr[i] == '/' || inpStr[i] == ')')
 			{
 				tmp += inpStr[i];
+				continue;
 			}
 
 			if ((inpStr[i] >= 48 && inpStr[i] <= 57) || inpStr[i] == 'x' || inpStr[i] == 'y' || inpStr[i] == 'z')
 			{
-				while (inpStr[i] != '*' && inpStr[i] != '/' && inpStr[i] != '(' && inpStr[i] != ')' && i < inpStr.size())
+				while (inpStr[i] != '*' && inpStr[i] != '/' && inpStr[i] != '(' && inpStr[i] != ')' && inpStr[i] != 'I' && inpStr[i] != 'D' && i < inpStr.size())
 				{
+					if (inpStr[i] == '+' || inpStr[i] == '-')
+					{
+						if (i + 1 >= inpStr.size())
+						{
+							throw ("Error: wrong string!");
+						}
+						else if (inpStr[i + 1] == 'I' || inpStr[i + 1] == '(' || inpStr[i + 1] == 'D')
+						{
+							break;
+						}
+					}
 					polStr += inpStr[i];
 					i++;
 				}
 
-				stringToMonomList(polStr);
 				Polinom tmpPol(*nameCounter, stringToMonomList(polStr));
-				//polTmp.push_back(tmpPol);
+				polTmp.push_back(tmpPol);
 
 				if (tmp.size() >= 1)
 				{
@@ -455,11 +474,19 @@ public:
 				nameCounter++;
 				tmp += inpStr[i];
 				polStr = "";
+				continue;
 			}
 		}
 
-		//polinoms = polTmp;
+		polinoms = polTmp;
 		str = tmp;
+	}
+
+	void print()
+	{
+		cout << "\nParse elem:\n polinomy \n";
+		polinoms.print();
+		cout << "\n names of var: { " << str << " }\n";
 	}
 };
 

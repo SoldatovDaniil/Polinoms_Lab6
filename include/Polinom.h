@@ -433,10 +433,11 @@ public:
 	{
 		monoms.mergeSort();
 	}
-	//	char getName()
-	//	{
-	//		return this->name;
-	//	}
+
+	char getName()
+	{
+		return this->name;
+	}
 
 	friend ostream& operator<<(ostream& ostr, const Polinom& p)
 	{

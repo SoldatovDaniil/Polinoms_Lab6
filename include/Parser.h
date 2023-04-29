@@ -380,7 +380,7 @@ public:
 		for (int i = 0; i < inpStr.size(); i++)
 		{
 
-			/*if (inpStr[i] == 'I' || inpStr[i] == 'D')
+			if (inpStr[i] == 'I' || inpStr[i] == 'D')
 			{
 				if (i + 2 >= inpStr.size())
 				{
@@ -391,7 +391,7 @@ public:
 					tmp += inpStr[i] + inpStr[i + 1] + inpStr[i + 2];
 					i += 3;
 				}
-			}*/
+			}
 
 			if (inpStr[i] == 'I' || inpStr[i] == 'D')
 			{
@@ -451,10 +451,10 @@ public:
 					polStr += inpStr[i];
 					i++;
 				}
-
+				
 				Polinom tmpPol(*nameCounter, stringToMonomList(polStr));
 				polTmp.push_back(tmpPol);
-
+				
 				if (tmp.size() >= 1)
 				{
 					if (tmp.back() == ')')
@@ -489,6 +489,3 @@ public:
 		cout << "\n names of var: { " << str << " }\n";
 	}
 };
-
-
-

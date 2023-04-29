@@ -7,10 +7,12 @@ private:
 	std::vector<std::pair<Tkey, Tvalue>> table;
 public:
 	using iterator = typename vector<pair<Tkey, Tvalue>>::iterator;
-	unordered_table(const std::pair<Tkey, Tvalue>& para)
+	unordered_table() =default;
+	unordered_table(Tkey key, Tvalue value)
 	{
-		table.push_back(para);
+		table.push_back(make_pair(key, value));
 	}
+	/*
 	unordered_table(const std::initializer_list<std::pair<Tkey, Tvalue>>& l)
 	{
 		for (auto it = l.begin(); it != l.end(); it++)
@@ -18,6 +20,7 @@ public:
 			insert(*it);
 		}
 	}
+	*/
 
 	void push(Tkey key, Tvalue value)
 	{

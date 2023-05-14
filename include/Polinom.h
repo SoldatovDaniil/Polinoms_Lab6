@@ -245,7 +245,7 @@ public:
 		//return monoms.cbegin();
 	//}
 
-	Polinom() : name('a') {};
+	Polinom() : name('a'), monoms(nullptr) {};
 
 	Polinom(Monom& mon)
 	{
@@ -253,15 +253,16 @@ public:
 		monoms.push_back(mon);
 	}
 
-	Polinom(const Polinom& pol) {
-		name = pol.name;
-		monoms = pol.monoms;
-	}
-
 	Polinom(char n, List<Monom> monomy)
 	{
 		monoms = monomy;
 		name = n;
+	}
+
+	Polinom(const Polinom& pol) 
+	{
+		name = pol.name;
+		monoms = pol.monoms;
 	}
 
 	Polinom& operator=(const Polinom& pol)

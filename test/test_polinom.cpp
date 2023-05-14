@@ -263,6 +263,7 @@ TEST(Polinom, can_do_simple_similar_terms)
 	p1.addfortest(m2);
 	p1.addfortest(m3);
 	p1.doSimple();
-	Polinom res(m1 + m2 + m3);
+	Monom m4(m1 + m2 + m3);
+	Polinom res(m4);
 	EXPECT_EQ(p1, res);
 }

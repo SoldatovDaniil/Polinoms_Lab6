@@ -245,7 +245,7 @@ public:
 		//return monoms.cbegin();
 	//}
 
-	Polinom() = default;
+	Polinom() : name('a') {};
 
 	Polinom(Monom& mon)
 	{

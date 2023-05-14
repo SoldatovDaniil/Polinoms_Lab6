@@ -267,6 +267,7 @@ public:
 		{
 			return &(*iter);
 		}
+		return &(*iter);
 	}
 
 	bool check()

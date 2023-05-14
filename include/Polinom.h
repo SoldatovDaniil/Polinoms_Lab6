@@ -10,7 +10,7 @@ using namespace std;
 class Monom
 {
 public:
-	double coef;
+	double coef = 1.;
 	double degX;
 	double degY;
 	double degZ;
@@ -241,9 +241,9 @@ public:
 	}
 
 	//	List<Monom>::iterator cbegin() const
-		//{
-			//return monoms.cbegin();
-		//}
+	//{
+		//return monoms.cbegin();
+	//}
 
 	Polinom() = default;
 
@@ -258,7 +258,7 @@ public:
 		monoms = pol.monoms;
 	}
 
-	Polinom(char& n, List<Monom> monomy)
+	Polinom(char n, List<Monom> monomy)
 	{
 		monoms = monomy;
 		name = n;
@@ -266,11 +266,13 @@ public:
 
 	Polinom& operator=(const Polinom& pol)
 	{
+		name = pol.name;
 		monoms = pol.monoms;
 		return *this;
 	}
 
 	void print() {
+		cout << "\nPolinom " << name << " = ";
 		auto it = monoms.begin();
 		while (it != nullptr) {
 			(*it).print();
@@ -312,6 +314,7 @@ public:
 	Polinom operator-(const Polinom& pol)
 	{
 		Polinom tmp(*this);
+		tmp.name = pol.name;
 		auto it2 = (pol.monoms).begin();
 		while (it2 != nullptr) {
 			tmp.subMonominPolinom(*it2);
@@ -376,6 +379,7 @@ public:
 	Polinom operator*(const Polinom& pol)
 	{
 		Polinom tmp;
+		tmp.name = name;
 		auto it1 = monoms.begin();
 		auto it2 = (pol.monoms).begin();
 		while (it1 != nullptr)
@@ -395,6 +399,7 @@ public:
 	Polinom operator/(const Polinom& pol)
 	{
 		Polinom tmp;
+		tmp.name = pol.name;
 		Polinom q(*this);
 		Polinom p(pol);
 		q.sort();
@@ -416,6 +421,7 @@ public:
 	Polinom integral(char var)
 	{
 		Polinom res;
+		res.name = name;
 		auto it = monoms.begin();
 		while (it != nullptr)
 		{
@@ -428,6 +434,7 @@ public:
 	Polinom deriv(char var)
 	{
 		Polinom res;
+		res.name = name;
 		auto it = monoms.begin();
 		while (it != nullptr)
 		{
@@ -469,6 +476,7 @@ public:
 		//Вывод
 	friend ostream& operator<<(ostream& ostr, const Polinom& p)
 	{
+		ostr << p.name << " = ";
 		auto it = (p.monoms).begin();
 		while (it != (p.monoms).end())
 		{

@@ -207,6 +207,18 @@ TEST(Polinom, operator_div)
 	res.addMonominPolinom(m2 / m3);
 	EXPECT_EQ(p1 / p2, res);
 }
+
+TEST(Polinom, operator_div_2)
+{
+	Monom m1(4, 2, 0, 0);
+	Monom m2(1, 1, 0, 0);
+	Polinom p1(m1);
+	Polinom p2(m2);
+	Polinom res;
+	res.addMonominPolinom(m1 / m2);
+	EXPECT_EQ(p1 / p2, res);
+}
+
 TEST(Polinom, can_take_integral)
 {
 	Monom m1(3, 1, 2, 3);

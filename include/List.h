@@ -393,7 +393,7 @@ public:
 		if (empty())
 		{
 			Node* tmp = new Node(value);
-			root = tmp;
+			root = new Node(value);
 		}
 		else
 		{

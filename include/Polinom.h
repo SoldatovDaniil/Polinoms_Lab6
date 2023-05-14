@@ -10,7 +10,7 @@ using namespace std;
 class Monom
 {
 public:
-	double coef;
+	double coef = 1.;
 	double degX;
 	double degY;
 	double degZ;
@@ -29,11 +29,9 @@ public:
 	double getY() { return degY; }
 	double getZ() { return degZ; }
 	double getCoef() { return coef; }
-
 	void print() {
 		std::cout << coef << "  " << degX << "  " << degY << "  " << degZ << "  " << std::endl;
 	}
-
 	~Monom()
 	{
 		coef = 0;
@@ -57,7 +55,6 @@ public:
 		res.coef += mOther.coef;
 		return res;
 	}
-
 	// false
 	bool operator>=(const Monom& other)
 	{
@@ -113,7 +110,7 @@ public:
 		res.coef /= n;
 		return res;
 	}
-
+	// по степеням
 	bool operator==(const Monom& mOther) const
 	{
 		if ((degX == mOther.degX) && (degY == mOther.degY) && (degZ == mOther.degZ))
@@ -128,31 +125,33 @@ public:
 
 	bool operator!=(const Monom& mOther) const
 	{
-		return(!(*this == mOther));
+		return !((*this) == mOther);
 	}
 
-	Monom deriv(char var)
+	//интеграл по переменной
+	Monom integral(char var)
 	{
 		Monom res(*this);
 		switch (var)
 		{
 		case 'x':
-			res.coef *= res.degX;
-			res.degX -= 1.;
+			res.coef /= res.degX + 1.;
+			res.degX += 1.;
 			break;
 		case 'y':
-			res.coef *= res.degY;
-			res.degY -= 1.;
+			res.coef /= res.degY + 1.;
+			res.degY += 1.;
 			break;
 		case 'z':
-			res.coef *= res.degZ;
-			res.degZ -= 1.;
+			res.coef /= res.degZ + 1.;
+			res.degZ += 1.;
 			break;
 		}
 		return res;
 	}
 
-	Monom integral(char var)
+	//производная по переменной
+	Monom deriv(char var)
 	{
 		Monom res(*this);
 		switch (var)
@@ -166,8 +165,8 @@ public:
 				res.degZ = 0;
 				break;
 			}
-			res.coef /= res.degX + 1.;
-			res.degX += 1.;
+			res.coef *= res.degX;
+			res.degX -= 1.;
 			break;
 		case 'y':
 			if (degY == 0)
@@ -178,8 +177,8 @@ public:
 				res.degZ = 0;
 				break;
 			}
-			res.coef /= res.degY + 1.;
-			res.degY += 1.;
+			res.coef *= res.degY;
+			res.degY -= 1.;
 			break;
 		case 'z':
 			if (degZ == 0)
@@ -190,13 +189,14 @@ public:
 				res.degZ = 0;
 				break;
 			}
-			res.coef /= res.degZ + 1.;
-			res.degZ += 1.;
+			res.coef *= res.degZ;
+			res.degZ -= 1.;
 			break;
 		}
 		return res;
 	}
 
+	//Значение в точке(Значение при известных только х, у, z, х и у, х и z, и т.д)
 	double pointValue(double x = 1, double y = 1, double z = 1)
 	{
 		double res = 0.0;
@@ -204,6 +204,7 @@ public:
 		return res;
 	}
 
+	//Вывод(Сделать без лишних нулей у коэфициентов), можно и с нулями
 	friend ostream& operator<<(ostream& ostr, const Monom& m)
 	{
 		if (m.coef != 1)
@@ -223,9 +224,11 @@ public:
 class Polinom
 {
 public:
-
 	char name;
 	List<Monom> monoms;
+
+	//на вход будет приходить строка(гарантировано правильная) и имя полинома
+	//коснтруктор по умолчанию,с параметрами, копирования, оператор = и деструктор
 
 	List<Monom>::iterator begin()
 	{
@@ -237,17 +240,23 @@ public:
 		return monoms.end();
 	}
 
-	//List<Monom>::iterator cbegin() const
+	//	List<Monom>::iterator cbegin() const
 	//{
 		//return monoms.cbegin();
 	//}
 
-	Polinom() = default;
+	Polinom() : name('a'), monoms(nullptr) {};
 
 	Polinom(Monom& mon)
 	{
 		name = 'a';
 		monoms.push_back(mon);
+	}
+
+	Polinom(char n, List<Monom> monomy)
+	{
+		monoms = monomy;
+		name = n;
 	}
 
 	Polinom(const Polinom& pol) 
@@ -256,20 +265,15 @@ public:
 		monoms = pol.monoms;
 	}
 
-	Polinom(char& n, List<Monom> monomy)
-	{
-		monoms = monomy;
-		name = n;
-	}
-
 	Polinom& operator=(const Polinom& pol)
 	{
-		monoms = pol.monoms;
 		name = pol.name;
+		monoms = pol.monoms;
 		return *this;
 	}
 
 	void print() {
+		cout << "\nPolinom " << name << " = ";
 		auto it = monoms.begin();
 		while (it != nullptr) {
 			(*it).print();
@@ -311,6 +315,7 @@ public:
 	Polinom operator-(const Polinom& pol)
 	{
 		Polinom tmp(*this);
+		tmp.name = pol.name;
 		auto it2 = (pol.monoms).begin();
 		while (it2 != nullptr) {
 			tmp.subMonominPolinom(*it2);
@@ -323,7 +328,7 @@ public:
 		monoms.push_back(mon);
 	}
 
-	void doSimple() {
+	void doSimple() { //привести подобные слагаемые можно сделать легче с tmp и методом addmoninpol
 		auto it1 = monoms.begin();
 		auto it2 = monoms.begin();
 		auto it3 = monoms.begin();
@@ -345,9 +350,37 @@ public:
 		}
 	}
 
+	bool operator==(const Polinom& p) const
+	{
+		Polinom p1(*this);
+		Polinom p2(p);
+		p1.sort();
+		p2.sort();
+		auto it1 = p1.monoms.begin();
+		auto it2 = p2.monoms.begin();
+		while ((it1 != nullptr) || (it2 != nullptr))
+		{
+			if (((*it1) != (*it2)) || ((*it1).getCoef() != (*it2).getCoef()))
+			{
+				return false;
+			}
+			it1++;
+			it2++;
+		}
+		if ((it1 != nullptr) || (it2 != nullptr))
+		{
+			return false;
+		}
+		return true;
+	}
+	bool operator!=(const Polinom& p) const
+	{
+		return !((*this) == p);
+	}
 	Polinom operator*(const Polinom& pol)
 	{
 		Polinom tmp;
+		tmp.name = name;
 		auto it1 = monoms.begin();
 		auto it2 = (pol.monoms).begin();
 		while (it1 != nullptr)
@@ -367,6 +400,7 @@ public:
 	Polinom operator/(const Polinom& pol)
 	{
 		Polinom tmp;
+		tmp.name = pol.name;
 		Polinom q(*this);
 		Polinom p(pol);
 		q.sort();
@@ -388,6 +422,7 @@ public:
 	Polinom integral(char var)
 	{
 		Polinom res;
+		res.name = name;
 		auto it = monoms.begin();
 		while (it != nullptr)
 		{
@@ -400,6 +435,7 @@ public:
 	Polinom deriv(char var)
 	{
 		Polinom res;
+		res.name = name;
 		auto it = monoms.begin();
 		while (it != nullptr)
 		{
@@ -409,7 +445,7 @@ public:
 			}
 			it++;
 		}
-		if (res.monoms.begin() == nullptr);
+		if (res.monoms.begin() == nullptr)
 		{
 			Monom m(0, 0, 0, 0);
 			res.addMonominPolinom(m);
@@ -433,14 +469,15 @@ public:
 	{
 		monoms.mergeSort();
 	}
-
 	char getName()
 	{
 		return this->name;
 	}
 
+		//Вывод
 	friend ostream& operator<<(ostream& ostr, const Polinom& p)
 	{
+		ostr << p.name << " = ";
 		auto it = (p.monoms).begin();
 		while (it != (p.monoms).end())
 		{

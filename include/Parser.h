@@ -367,16 +367,9 @@ public:
 		List<Polinom> polTmp;
 		string tmp;
 		string polStr;
-		List<char> nameList;
+		vector<char> nameList = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k'};
 		bool flagTwo = false;
-
-		for (int i = 97; i <= 122; i++)
-		{
-			nameList.push_back(i);
-		}
-
-		List<char>::iterator nameCounter = nameList.begin();
-
+		int nameCounter = 0;
 		for (int i = 0; i < inpStr.size(); i++)
 		{
 
@@ -389,12 +382,17 @@ public:
 				else if((inpStr[i + 1] == 'x' || inpStr[i + 1] == 'y' || inpStr[i + 1] == 'z') && inpStr[i + 2] == '(')
 				{
 					tmp += inpStr[i] + inpStr[i + 1] + inpStr[i + 2];
-					i += 3;
+					i += 2;
+					continue;
 				}
 			}*/
 
 			if (inpStr[i] == 'I' || inpStr[i] == 'D')
 			{
+				if (i + 2 >= inpStr.size())
+				{
+					throw ("Error: wrong view of input string!");
+				}
 				tmp += inpStr[i];
 				flagTwo = true;
 				continue;
@@ -452,7 +450,8 @@ public:
 					i++;
 				}
 
-				Polinom tmpPol(*nameCounter, stringToMonomList(polStr));
+				char name = nameList[nameCounter];
+				Polinom tmpPol(name, stringToMonomList(polStr));
 				polTmp.push_back(tmpPol);
 
 				if (tmp.size() >= 1)
@@ -470,7 +469,7 @@ public:
 					}
 				}
 
-				tmp += *nameCounter;
+				tmp += nameList[nameCounter];
 				nameCounter++;
 				tmp += inpStr[i];
 				polStr = "";
@@ -482,6 +481,16 @@ public:
 		str = tmp;
 	}
 
+	List<Polinom> getPolinomList()
+	{
+		return polinoms;
+	}
+
+	string getString()
+	{
+		return str;
+	}
+
 	void print()
 	{
 		cout << "\nParse elem:\n polinomy \n";
@@ -489,6 +498,3 @@ public:
 		cout << "\n names of var: { " << str << " }\n";
 	}
 };
-
-
-

@@ -272,6 +272,25 @@ public:
 		return *this;
 	}
 
+	bool operator<(const Polinom& pol)
+	{
+
+	}
+
+	bool operator>(const Polinom& pol)
+	{
+
+	}
+
+	bool empty()
+	{
+		if (name == 'a' && monoms.empty())
+		{
+			return true;
+		}
+		return false;
+	}
+
 	void print() {
 		cout << "\nPolinom " << name << " = ";
 		auto it = monoms.begin();

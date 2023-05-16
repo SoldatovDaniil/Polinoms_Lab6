@@ -361,6 +361,11 @@ public:
 	List<Polinom> polinoms;
 	string str;
 
+	PolinomParse()
+	{
+		str = "";
+	}
+
 	//обозначение интеграла и производной Ix и Dx
 	PolinomParse(const string& inpStr)
 	{

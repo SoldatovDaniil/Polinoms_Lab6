@@ -1,15 +1,16 @@
 #include<gtest.h>
 #include<iostream>
 #include"HashChain.h"
+#include <string>
 TEST(hash_chains, can_insert)
 {
-	hash_table<string, int> b;
+	hash_table<std::string, int> b;
 	ASSERT_NO_THROW(b.insert({ "ab",3 }));
 }
 
 TEST(hash_chains, can_find_element)
 {
-	hash_table<string, int> b;
+	hash_table<std::string, int> b;
 	b.insert({ "ab",3 });
 	b.insert({ "aba",5 });
 	b.insert({ "abc",4 });
@@ -19,7 +20,7 @@ TEST(hash_chains, can_find_element)
 
 TEST(hash_chains, can_insert_correct)
 {
-	hash_table<string, int> b;
+	hash_table<std::string, int> b;
 	b.insert({ "ab",3 });
 	b.insert({ "aba",5 });
 	auto it = b.find("ab");
@@ -28,7 +29,7 @@ TEST(hash_chains, can_insert_correct)
 
 TEST(hash_chains, can_erase)
 {
-	hash_table<string, int> b;
+	hash_table<std::string, int> b;
 	b.insert({ "ab",3 });
 	b.insert({ "aba",5 });
 	ASSERT_NO_THROW(b.erase("aba"));
@@ -36,7 +37,7 @@ TEST(hash_chains, can_erase)
 
 TEST(hash_chains, can_give_any_element_in_list)
 {
-	hash_table<string, int> b;
+	hash_table<std::string, int> b;
 	b.insert({ "2222",3 });// hash2222=hash22
 	b.insert({ "22",5 });
 	b.insert({ "aba",67 });

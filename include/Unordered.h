@@ -1,6 +1,11 @@
-#include"Polinom.h"
+#pragma once
 #include<vector>
 #include<algorithm>
+
+
+using namespace std;
+
+
 template<typename Tkey, typename Tvalue>
 class unordered_table {
 private:

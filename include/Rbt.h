@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 
 
@@ -14,25 +15,24 @@ public:
 		red
 	};
 
-	template <class Key>
 	struct rbtNode
 	{
-		
-
-		Key key;
+		int key;
+		T value;
 		Colors color;
-		rbtNode<Key>* leftPointer;
-		rbtNode<Key>* rightPointer;
-		rbtNode<Key>* parent;
+		rbtNode* leftPointer;
+		rbtNode* rightPointer;
+		rbtNode* parent;
 
-		rbtNode(Key k, Colors c, rbtNode* p, rbtNode* l, rbtNode* r) :
-			color(c), key(k), leftPointer(l), rightPointer(r), parent(p) {};
+		rbtNode(int k, T v, Colors c, rbtNode* p, rbtNode* l, rbtNode* r) :
+			color(c), key(k), value(v), leftPointer(l), rightPointer(r), parent(p) {};
 	};
  
-	rbtNode<T>* root;
+	rbtNode* root;
 
 	rbtTree<T>() : root(NULL)
 	{
+		T value;
 		root = nullptr;
 	}
 
@@ -41,7 +41,7 @@ public:
 		deleteNode(root);
 	}
 
-	void deleteNode(rbtNode<T>*& node)
+	void deleteNode(rbtNode*& node)
 	{
 		if (node == NULL)
 		{
@@ -54,9 +54,9 @@ public:
 		node = nullptr;
 	}
 
-	void leftRotate(rbtNode<T>* &root, rbtNode<T>* firstNode)
+	void leftRotate(rbtNode* &root, rbtNode* firstNode)
 	{
-		rbtNode<T>* secondNode = firstNode->rightPointer;
+		rbtNode* secondNode = firstNode->rightPointer;
 		firstNode->rightPointer = secondNode->leftPointer;
 
 		if (secondNode->leftPointer != NULL)
@@ -86,8 +86,8 @@ public:
 		firstNode->parent = secondNode;
 	}
 
-	void rightRotate(rbtNode<T>* &root, rbtNode<T>* secondNode) {
-		rbtNode<T>* firstPointer = secondNode->leftPointer;
+	void rightRotate(rbtNode* &root, rbtNode* secondNode) {
+		rbtNode* firstPointer = secondNode->leftPointer;
 		secondNode->leftPointer = firstPointer->rightPointer;
 
 		if (firstPointer->rightPointer != NULL)
@@ -116,16 +116,16 @@ public:
 		secondNode->parent = firstPointer;
 	}
 
-	void insert(T key)
+	void insert(int key, T val)
 	{
-		rbtNode<T>* node = new rbtNode<T>(key, red, NULL, NULL, NULL);
+		rbtNode* node = new rbtNode(key, val, red, NULL, NULL, NULL);
 		insert(root, node);
 	}
 
-	void insert(rbtNode<T>* &root, rbtNode<T>* node)
+	void insert(rbtNode* &root, rbtNode* node)
 	{
-		rbtNode<T>* firstNode = root;
-		rbtNode<T>* secondNode = NULL;
+		rbtNode* firstNode = root;
+		rbtNode* secondNode = NULL;
 
 		while (firstNode != NULL)
 		{
@@ -163,17 +163,17 @@ public:
 		insertWithParent(root, node);
 	}
 	
-	void insertWithParent(rbtNode<T>* &root, rbtNode<T>* node)
+	void insertWithParent(rbtNode* &root, rbtNode* node)
 	{
-		rbtNode<T>* parent;
+		rbtNode* parent;
 		parent = node->parent;
 
 		while (node != rbtTree::root && parent->color == red)
 		{
-			rbtNode<T>* upParent = parent->parent;
+			rbtNode* upParent = parent->parent;
 			if (upParent->leftPointer == parent)
 			{
-				rbtNode<T>* uncle = upParent->rightPointer;
+				rbtNode* uncle = upParent->rightPointer;
 				if (uncle != NULL && uncle->color == red)
 				{
 					parent->color = black;
@@ -198,7 +198,7 @@ public:
 			}
 			else
 			{
-				rbtNode<T>* uncle = upParent->leftPointer;
+				rbtNode* uncle = upParent->leftPointer;
 				if (uncle != NULL && uncle->color == red)
 				{
 					upParent->color = red;
@@ -226,24 +226,24 @@ public:
 		root->color = black;
 	}
 
-	void remove(T key)
+	void remove(int key)
 	{
-		rbtNode<T>* delNode = search(root, key);
+		rbtNode* delNode = search(root, key);
 		if (delNode != NULL)
 		{
 			remove(root, delNode);
 		}
 	}
 
-	void remove(rbtNode<T>* &root, rbtNode<T>* node)
+	void remove(rbtNode* &root, rbtNode* node)
 	{
-		rbtNode<T>* child;
-		rbtNode<T>* parent;
+		rbtNode* child;
+		rbtNode* parent;
 		Colors color;
 
 		if (node->leftPointer != NULL && node->rightPointer != NULL)
 		{
-			rbtNode<T>* replace = node;
+			rbtNode* replace = node;
 			replace = node->rightPointer;
 
 			while (replace->leftPointer != NULL)
@@ -343,9 +343,9 @@ public:
 		delete node;
 	}
 
-	void removeWithParent(rbtNode<T>* &root, rbtNode<T>* node, rbtNode<T>* parent)
+	void removeWithParent(rbtNode* &root, rbtNode* node, rbtNode* parent)
 	{
-		rbtNode<T>* othernode;
+		rbtNode* othernode;
 		while ((!node) || node->color == black && node != rbtTree::root)
 		{
 			if (parent->leftPointer == node)
@@ -418,12 +418,12 @@ public:
 		}
 	}
 		
-	rbtNode<T>* search(T key)
+	rbtNode* search(int key)
 	{
 		return search(root, key);
 	}
 
-	rbtNode<T>* search(rbtNode<T>* node, T key) const
+	rbtNode* search(rbtNode* node, int key) const
 	{
 		if (node == NULL || node->key == key)
 		{
@@ -454,7 +454,7 @@ public:
 		}
 	}
 	
-	void print(rbtNode<T>* node)const 
+	void print(rbtNode* node)const 
 	{
 		if (node == NULL)
 		{
@@ -462,15 +462,15 @@ public:
 		}
 		if (node->parent == NULL)
 		{
-			cout << node->key << "(" << node->color << ") is root" << '\n';
+			cout << node->key <<  " | " << node->value << "(" << node->color << ") is root" << '\n';
 		}
 		else if (node->parent->leftPointer == node)
 		{
-			cout << node->key << "(" << node->color << ") is " << node->parent->key << "'s " << "left child" << '\n';
+			cout << node->key << " | " << node->value << "(" << node->color << ") is " << node->parent->key << "'s " << "left child" << '\n';
 		}
 		else
 		{
-			cout << node->key << "(" << node->color << ") is " << node->parent->key << "'s " << "right child" << '\n';
+			cout << node->key <<  " | " << node->value << "(" << node->color << ") is " << node->parent->key << "'s " << "right child" << '\n';
 		}
 
 		print(node->leftPointer);
@@ -489,7 +489,7 @@ public:
 	//	}
 	//}
 
-	//void preOrder(rbtNode<T>* tree)const 
+	//void preOrder(rbtNode* tree)const 
 	//{
 	//	if (tree != NULL) 
 	//	{
@@ -511,7 +511,7 @@ public:
 	//	}
 	//}
 	//
-	//void inOrder(rbtNode<T>* tree) const 
+	//void inOrder(rbtNode* tree) const 
 	//{
 	//	if (tree != NULL) 
 	//	{
@@ -533,7 +533,7 @@ public:
 	//	}
 	//}
 
-	//void postOrder(rbtNode<T>* tree) const
+	//void postOrder(rbtNode* tree) const
 	//{
 	//	if (tree != NULL) 
 	//	{

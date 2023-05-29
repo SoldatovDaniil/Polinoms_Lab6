@@ -1,7 +1,12 @@
-#include"Polinom.h"
+#pragma once
 #include<vector>
 #include<algorithm>
 #include<list>
+
+
+using namespace std;
+
+
 template<typename Tkey, typename Tvalue>
 class hash_table {
 private:

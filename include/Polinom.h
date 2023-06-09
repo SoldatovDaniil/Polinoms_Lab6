@@ -29,7 +29,8 @@ public:
 	double getY() { return degY; }
 	double getZ() { return degZ; }
 	double getCoef() { return coef; }
-	void print() {
+	void print() 
+	{
 		std::cout << coef << "  " << degX << "  " << degY << "  " << degZ << "  " << std::endl;
 	}
 	~Monom()
@@ -245,7 +246,11 @@ public:
 		//return monoms.cbegin();
 	//}
 
-	Polinom() : name('a'), monoms(nullptr) {};
+	Polinom()
+	{
+		name = 'a';
+		monoms.push_back(Monom());
+	}
 
 	Polinom(Monom& mon)
 	{

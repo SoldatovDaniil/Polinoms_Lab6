@@ -227,7 +227,8 @@ TEST(Polinom, can_take_integral)
 	p1.addMonominPolinom(m2);
 	Monom m3(1, 1, 3, 3);
 	Monom m4(2, 4, 6, 6);
-	Polinom res(m3);
+	Polinom res;
+	res.addMonominPolinom(m3);
 	res.addMonominPolinom(m4);
 	EXPECT_EQ(p1.integral('y'), res);
 }
@@ -239,7 +240,8 @@ TEST(Polinom, can_derivate)
 	p1.addMonominPolinom(m2);
 	Monom m3(9, 1, 2, 2);
 	Monom m4(72, 4, 5, 5);
-	Polinom res(m3);
+	Polinom res;
+	res.addMonominPolinom(m3);
 	res.addMonominPolinom(m4);
 	EXPECT_EQ(p1.deriv('z'), res);
 }

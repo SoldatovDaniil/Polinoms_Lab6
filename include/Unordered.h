@@ -87,7 +87,7 @@ public:
 			}
 		}
 		
-		return (Tvalue)NULL;
+		return Tvalue();
 	}
 
 	void print()
